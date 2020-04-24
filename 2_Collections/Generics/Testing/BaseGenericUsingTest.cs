@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Linq;
 
-using ITEA_Collections.Common;
-using ITEA_Collections.Usings;
 using static ITEA_Collections.Common.Extensions;
 
-namespace ITEA_Collections.Testing
+namespace ITEA_Collections.Generics.Testing
 {
-    internal class BaseUsingTest
+    class BaseGenericUsingTest
     {
-        public static void Execute(ref IBaseCollectionUsing collectionUsing, object[] p = null)
+        public static void Execute<T>(ref IBaseGenericCollectionUsing<T> collectionUsing, T[] parameters)
         {
-            p = p ?? new object[] { 2, new { name = 3 } };
             try
             {
-                collectionUsing.Add("1");
-                collectionUsing.AddMany(p);
+                collectionUsing.AddMany(parameters);
                 if (!collectionUsing.GetAll().Any())
                     throw new Exception("Test failed, Add/AddMany");
                 collectionUsing.RemoveByID(15);
-                var i1 = collectionUsing.GetByID(1);
+                T i1 = collectionUsing.GetByID(1);
                 collectionUsing.RemoveByID(1);
-                if (i1 == collectionUsing.GetByID(1))
+                if (i1.Equals(collectionUsing.GetByID(1)))
                     throw new Exception("Test failed, RemoveByID");
                 collectionUsing.GetAll().ToList().ForEach(x => ToConsole(x, ConsoleColor.Cyan));
                 collectionUsing.Clear();
